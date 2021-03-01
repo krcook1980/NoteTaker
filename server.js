@@ -3,10 +3,8 @@ const express = require('express');
 const app = express();
 const path = require('path');
 const fs = require('fs');
-
+const currArr = require('./db/db.json')
 const PORT = process.env.PORT || 3001;
-
-const taskArr = [];
 
 
 app.use(express.urlencoded({ extended: true }));
@@ -28,22 +26,20 @@ app.get("/notes", function (req, res) {
  
 });
 
-app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '/public/index.html'));
-  });
-
 //api routes
 
 app.post('/api/notes', function(req, res) {
-  const newTask = JSON.stringify(req.body);
-  console.log(newTask)
-  taskArr.push(newTask);
-  fs.writeFileSync('./db/db.json', `[${taskArr}]`)
+  currArr.push(req.body);
+  res.json(true);
+  //push info into db.json
+  
+  
   });
+
 
 app.get('/api/notes', function(req, res){
  
-  res.json(taskArr);
+  res.json(currArr);
   
 });
 
