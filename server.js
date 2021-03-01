@@ -2,13 +2,16 @@
 const express = require('express');
 const app = express();
 const path = require('path');
+const fs = require('fs');
 
 const PORT = process.env.PORT || 3001;
+
+const taskArr = [];
 
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-
+app.use(express.static('public'));
 
 //start server
 app.listen(PORT, () => console.log(`Server listening on: http://localhost:${PORT}/`));
@@ -17,12 +20,12 @@ app.listen(PORT, () => console.log(`Server listening on: http://localhost:${PORT
 
 app.get("/", function (req, res) {
     res.sendFile(path.join(__dirname, "/public/index.html"));
-    console.log("I work")
+    
 });
 
 app.get("/notes", function (req, res) {
   res.sendFile(path.join(__dirname, "/public/notes.html"));
-  console.log("I work")
+ 
 });
 
 app.get('*', (req, res) => {
@@ -31,10 +34,17 @@ app.get('*', (req, res) => {
 
 //api routes
 
-app.post('/api/tasks', function(req, res) {
-    let newTask = req.body
-    tasksArr.push(newTask)
-    console.log(tasksArr)
+app.post('/api/notes', function(req, res) {
+  const newTask = JSON.stringify(req.body);
+  console.log(newTask)
+  taskArr.push(newTask);
+  fs.writeFileSync('./db/db.json', `[${taskArr}]`)
   });
+
+app.get('/api/notes', function(req, res){
+ 
+  res.json(taskArr);
+  
+});
 
 
