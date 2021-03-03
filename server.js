@@ -15,7 +15,7 @@ require('./routes/apiRoutes')(app);
 require('./routes/htmlRoutes')(app);
 
 //start server
-app.listen(PORT, () => console.log(`Server listening on: http://localhost:${PORT}/notes`));
+app.listen(PORT, () => console.log(`Server listening on: http://localhost:${PORT}`));
 
 
 
